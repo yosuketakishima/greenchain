@@ -10,7 +10,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_14_115251) do
+ActiveRecord::Schema.define(version: 2021_09_14_123931) do
+
+  create_table "units", charset: "utf8mb4", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.integer "unit"
+    t.string "origin"
+    t.string "destination"
+    t.string "owner"
+    t.time "departure_time"
+    t.time "arrival_time"
+    t.integer "monday"
+    t.integer "tuesday"
+    t.integer "wednesday"
+    t.integer "thursday"
+    t.integer "friday"
+    t.integer "saturday"
+    t.integer "sunday"
+    t.integer "upper_temperature"
+    t.integer "lower_temperature"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_units_on_user_id"
+  end
 
   create_table "users", charset: "utf8mb4", force: :cascade do |t|
     t.string "name"
@@ -20,4 +42,5 @@ ActiveRecord::Schema.define(version: 2021_09_14_115251) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  add_foreign_key "units", "users"
 end
