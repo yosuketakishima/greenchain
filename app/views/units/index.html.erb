@@ -23,5 +23,23 @@
         <% end %>
 </table>
 
-
 <%# 通常は条件文、詳細・結果・設定はルート設定必要%>
+
+<h2>gmap</h2>
+<div id='map'></div>
+
+<style>
+#map{
+  height: 400px;
+}
+</style>
+
+<script>
+function initMap(){
+  let map = new google.maps.Map(document.getElementById('map'), {
+  center: {lat: 35.681236, lng: 139.767125},
+  zoom: 8
+  });
+}
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJ-iUrMR3kpO9ir_CO0OXdg2hdiKsolnM&callback=initMap" async defer></script>
