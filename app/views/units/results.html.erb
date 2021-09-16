@@ -1,0 +1,18 @@
+<h1>Search</h1>
+<%= form_with(scope: :results, url: results_path, method: :get, local: true) do |f| %>
+
+  <%= f.label :temperature, "期間" %>
+  <%= f.date_field :date_from, value: @results_params[:date_from] %> ~
+  <%= f.date_field :date_to, value: @results_params[:date_to] %>
+  
+  <%= submit_tag '検索', class: "button" %>
+
+<% end %>
+
+<% @temperatures.each do |temperature| %>
+
+    <p><%= temperature.latitude %></p>
+
+<% end %>
+    
+    
