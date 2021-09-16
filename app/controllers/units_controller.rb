@@ -1,6 +1,8 @@
 class UnitsController < ApplicationController
     def index
         @units=Unit.all
+        @temperatures=Temperature.all
+        gon.temperatures=Temperature.all
     end
     
     def show
