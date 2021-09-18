@@ -13,7 +13,9 @@
     <%= include_gon %>
   </head>
 
-  <body>
+  <body data-turbolinks="false">
+    <%= render 'layouts/navbar' %>
+    
     <%= yield %>
   </body>
 </html>

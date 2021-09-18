@@ -16,14 +16,16 @@
         <th><%=unit.destination %></th>
         <th><%=unit.owner %></th>
         <th>通常</th> 
-        <th>詳細</th>
-        <th>結果</th>
+        <th><%= link_to "詳細", unit %></th>
+        <th><%= link_to "結果", results_path(unit) %></th>
         <th>設定</th>
     </tr>
         <% end %>
 </table>
 
 <%# 通常は条件文、詳細・結果・設定はルート設定必要%>
+
+<%= Time.zone.now.strftime("%Y-%m-%d %H:%M") %>
 
 <h2>gmap</h2>
 <div id='map'></div>
