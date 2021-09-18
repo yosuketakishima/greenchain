@@ -10,7 +10,7 @@ class UnitsController < ApplicationController
         @units=Unit.all
         
         temp= Temperature.group(:time).sum(:temperature)
-        base = Temperature.group(:time).sum(:latitude)
+        base = Unit.joins(:temperatures).group(:time).sum(:upper_temperature)
         
         @chart = [
          { name: "温度", data: temp },
