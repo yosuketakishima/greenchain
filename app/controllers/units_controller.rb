@@ -29,14 +29,10 @@ class UnitsController < ApplicationController
     end
     
     def results
-        @results_params = temperature_results_params
-        @temperatures = Temperature.results(@results_params)
-    end
-    
-    private
-    
-    def temperature_results_params
-    params.fetch(:results, {}).permit(:date_from, :date_to)
+        @day_from = params[:day_from]
+        @day_to = params[:day_to]
+        @temperatures = Temperature.where(time: @day_from..@day_to)
     end
 
+    
 end

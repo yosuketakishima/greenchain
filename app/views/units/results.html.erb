@@ -1,9 +1,9 @@
-<h1>Search</h1>
-<%= form_with(scope: :results, url: results_path, method: :get, local: true) do |f| %>
+<h1>検索</h1>
+<%= form_with(url: results_path, method: :get, local: true) do |f| %>
 
   <%= f.label :temperature, "期間" %>
-  <%= f.date_field :date_from, value: @results_params[:date_from] %> ~
-  <%= f.date_field :date_to, value: @results_params[:date_to] %>
+  <%= f.date_field :day_from, value: @day_from %> ~
+  <%= f.date_field :day_to, value: @day_to %>
   
   <%= submit_tag '検索', class: "button" %>
 
@@ -11,8 +11,14 @@
 
 <% @temperatures.each do |temperature| %>
 
-    <p><%= temperature.latitude %></p>
+ <%# if temperature.temperature = 8 %>
+
+    <p><%= temperature.temperature %></p>
+  
+ <%# else %>
+ 
+ <%# end %>
 
 <% end %>
-    
-    
+
+<%= Temperature.where('temperature < ?', 8 ).first.temperature %>
