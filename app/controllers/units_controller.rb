@@ -6,11 +6,12 @@ class UnitsController < ApplicationController
     end
     
     def show
-        @temperatures = Temperature.all
-        @units=Unit.all
         
-        temp= Temperature.group(:time).sum(:temperature)
-        base = Unit.joins(:temperatures).group(:time).sum(:upper_temperature)
+        @units=Unit.find(params[:id])
+        @temperatures = Temperature.where(unit_id: params[:id])
+        
+        temp= @temperatures.group(:time).sum(:temperature)
+        base = Unit.joins(:temperatures).where(unit: params[:id]).group(:time).sum(:upper_temperature)
         
         @chart = [
          { name: "温度", data: temp },
