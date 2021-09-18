@@ -11,4 +11,8 @@ class Temperature < ApplicationRecord
   scope :date_from, -> (from) { where('? <= time', from) }
   scope :date_to, -> (to) { where('time <= ?', to) }
   
+  def self.temperature_data
+    order(time: :asc).pluck('time', 'temperature').to_h
+  end
+  
 end

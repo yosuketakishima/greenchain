@@ -1,0 +1,13 @@
+ <% @temperatures.each do |temperature| %>
+ <%=temperature.temperature %>
+ <% end %>
+ 
+ <%= @temperature_data %>
+ <%= line_chart @temperature_data %>
+ 
+ <%= line_chart Temperature.group(:time).sum(:temperature) %>
+ <%= line_chart @temperatures.temperature_data %>
+ <%= line_chart @chart %>
+ 
+ <%= Unit.joins(:temperatures).select("units.*, temperatures.*").last.temperature %>
+ 

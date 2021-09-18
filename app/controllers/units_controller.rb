@@ -6,6 +6,16 @@ class UnitsController < ApplicationController
     end
     
     def show
+        @temperatures = Temperature.all
+        @units=Unit.all
+        
+        temp= Temperature.group(:time).sum(:temperature)
+        base = Temperature.group(:time).sum(:latitude)
+        
+        @chart = [
+         { name: "温度", data: temp },
+         { name: "基準", data: base },
+        ]
     end
     
     def edit

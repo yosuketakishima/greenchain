@@ -9,3 +9,6 @@ import "channels"
 
 Rails.start()
 Turbolinks.start()
+
+
+import "chartkick/chart.js"
