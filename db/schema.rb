@@ -10,7 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_14_134308) do
+ActiveRecord::Schema.define(version: 2021_09_18_100623) do
+
+  create_table "deviations", charset: "utf8mb4", force: :cascade do |t|
+    t.bigint "unit_id", null: false
+    t.timestamp "time"
+    t.float "temperature"
+    t.decimal "latitude", precision: 10
+    t.decimal "longitude", precision: 10
+    t.string "situation"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["unit_id"], name: "index_deviations_on_unit_id"
+  end
 
   create_table "temperatures", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "unit_id", null: false
@@ -53,6 +65,7 @@ ActiveRecord::Schema.define(version: 2021_09_14_134308) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  add_foreign_key "deviations", "units"
   add_foreign_key "temperatures", "units"
   add_foreign_key "units", "users"
 end
