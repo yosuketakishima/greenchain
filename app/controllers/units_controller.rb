@@ -39,12 +39,10 @@ class UnitsController < ApplicationController
     def destroy
         @day_from = params[:day_from]
         @day_to = params[:day_to]
-        @memory = Temperature.find_by(unit_id: params[:id], time: @day_from..@day_to)
-        @memory.destroy
+        Temperature.where(unit_id: params[:id], time: @day_from..@day_to).destroy_all
         
         flash[:success] = 'データ は正常に削除されました'
         redirect_to units_path
-        
     end
     
     def results
