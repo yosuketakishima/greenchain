@@ -70,10 +70,13 @@ function initMap(){
     
     
 <% else %>
-    
-    <div class="main-container">
-    <p>Green ChainはIoTデバイスによる温度モニタリングを通じて高品質・クリーンなコールドチェーン構築をサポートするWebサービスです</p>
-    <%= link_to '新規登録', signup_path, class: 'btn btn-lg btn-primary' %>
-    <%= link_to 'ログイン', login_path, class: 'btn btn-lg btn-primary' %>
+ <div class="row">
+    <div class="background">
+     <p class="white">Green ChainはIoTデバイスによる温度モニタリング</br>を通じて高品質・クリーンなコールドチェーン構築</br>をサポートするWebサービスです</p>
+     <div class="text-center boxtop">
+        <p><%= link_to '新規登録', signup_path, class: 'btn btn-lg btn-success' %></p>
+        <p><%= link_to 'ログイン', login_path, class: 'btn btn-lg btn-success' %></p>
+     </div>
     </div>
+ </div>
 <% end %>

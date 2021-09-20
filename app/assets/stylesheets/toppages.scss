@@ -2,12 +2,23 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: https://sass-lang.com/
 
-.main-container {
+.white {
+    color: white;
+}
+
+.background {
   background-image: image-url('top.jpg');
   height: 100vh;
   width: 100%;
-  background-size:cover;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  margin: 0px;
+  padding: 0px;
 }
+
+.boxtop {margin-top: 500px;
+    }
 
 .circle_blue{
   width: 20px;
