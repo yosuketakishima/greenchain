@@ -5,7 +5,7 @@
 </ul>
 
 <h1>検索</h1>
-<%= form_with(url: results_path, method: :get, local: true) do |f| %>
+<%= form_with(url: result_path, method: :get, local: true) do |f| %>
 
   <%= f.label :deviation, "期間" %>
   <%= f.date_field :day_from, value: @day_from %> ~

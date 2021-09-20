@@ -1,29 +1,21 @@
 <% if logged_in? %>
-    <p>ログイン完了ユーザ: <%= current_user.name %></p>
-    
+<div class="text-end h3">
     <%= Time.zone.now.strftime("%Y-%m-%d %H:%M") %>
+</div>
 
-<h2>gmap</h2>
-<p>通常</p><p class="circle_blue"></p>
-<p>温度注意</p><p class="circle_orange"></p>
-<p>温度逸脱</p><p class="circle_red"></p>
-<p>不稼働</p><p class="circle_gray"></p>
-
-   <% @units.each do |unit| %>
-        <%=unit.owner %>
-        
-   <% end %>
-
-   <% @temperatures.each do |temperature| %>
-        <%=temperature.temperature %>
-        
-   <% end %>
+<div>
+<p>通常：</span><span class="circle_blue">　 </span>
+<span>　温度注意：</span><span class="circle_orange">　 </span>
+<span>　温度逸脱：</span><span class="circle_red">　 </span>
+<span>　不稼働：</span><span class="circle_gray">　  </span>
+<span>　</span>
+</div>
 
 <div id='map'></div>
 
 <style>
 #map{
-  height: 400px;
+  height: 700px;
 }
 </style>
 
@@ -40,14 +32,49 @@ function initMap(){
   marker = new google.maps.Marker({
     position:  {lat: <%=temperature.latitude %>, lng:<%=temperature.longitude %>},
     map: map,
+    
+    <% if temperature.temperature > (temperature.unit.lower_temperature+1) and temperature.temperature < (temperature.unit.upper_temperature-1) %>
     icon: {
-		fillColor: "#FF0000",                //塗り潰し色
+		fillColor: "blue",                //塗り潰し色
 		fillOpacity: 0.8,                    //塗り潰し透過率
 		path: google.maps.SymbolPath.CIRCLE, //円を指定
 		scale: 8,                           //円のサイズ
-		strokeColor: "#FF0000",              //枠の色
+		strokeColor: "blue",              //枠の色
 		strokeWeight: 1.0                    //枠の透過率
 	},
+
+		<% elsif temperature.temperature <= (temperature.unit.lower_temperature+1) and temperature.temperature >= temperature.unit.lower_temperature %>
+	 icon: {
+		fillColor: "#FF6600",                //塗り潰し色
+		fillOpacity: 0.8,                    //塗り潰し透過率
+		path: google.maps.SymbolPath.CIRCLE, //円を指定
+		scale: 8,                           //円のサイズ
+		strokeColor: "#FF6600",              //枠の色
+		strokeWeight: 1.0                    //枠の透過率
+	},
+	<% elsif temperature.temperature <= temperature.unit.upper_temperature and temperature.temperature >= (temperature.unit.upper_temperature-1) %>
+	 icon: {
+		fillColor: "#FF6600",                //塗り潰し色
+		fillOpacity: 0.8,                    //塗り潰し透過率
+		path: google.maps.SymbolPath.CIRCLE, //円を指定
+		scale: 8,                           //円のサイズ
+		strokeColor: "#FF6600",              //枠の色
+		strokeWeight: 1.0                    //枠の透過率
+	},
+	
+	<% elsif temperature.temperature < temperature.unit.lower_temperature or temperature.temperature > temperature.unit.upper_temperature %>
+	 icon: {
+		fillColor: "red",                //塗り潰し色
+		fillOpacity: 0.8,                    //塗り潰し透過率
+		path: google.maps.SymbolPath.CIRCLE, //円を指定
+		scale: 8,                           //円のサイズ
+		strokeColor: "red",              //枠の色
+		strokeWeight: 1.0                    //枠の透過率
+	},
+	
+	<% end %>
+	
+	
 	label: {
 		text: '<%=temperature.unit_id %>',                           //ラベル文字
 		color: '#FFFFFF',                    //文字の色
@@ -66,8 +93,17 @@ function initMap(){
    <% end %>
 }
 </script>
+
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJ-iUrMR3kpO9ir_CO0OXdg2hdiKsolnM&callback=initMap" async defer></script>
-    
+
+ <% @temperatures.each do |temperature| %>
+ <% if temperature.temperature < 3 %>
+ <p>1</p>
+ <% else %>
+ <p>2</p>
+ <% end %>
+ 
+ <% end %>
     
 <% else %>
  <div class="row">

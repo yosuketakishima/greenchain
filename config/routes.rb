@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   get 'results', to: 'results#index'
   
   resources :units, only: [:index, :show, :edit, :update, :destroy]
-  get 'units/:id/results', to: 'units#results'
+  get 'units/:id/results', to: 'units#results', as: 'result'
   post 'units/:id/edit', to: 'units#edit', as: 'edit'
   post 'units/:id/destroy', to: 'units#destroy', as: 'destroy'
   
