@@ -13,6 +13,7 @@ class ToppagesController < ApplicationController
   end
   
   def tests
+      @units=current_user.units
       @temperatures=Temperature.all
       @today=Time.zone.now.strftime("%A").downcase
   end

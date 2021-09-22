@@ -1,75 +1,137 @@
-<table class="table">
-    <tr>
-        <th>ユニット</th>
-        <th>出発地</th>
-        <th>目的地</th>
-        <th>所有者</th>
-        <th>状態</th>
-        <th></th>
-        <th></th>
-        <th></th>
-    </tr>  
-        <% @units.each do |unit| %>
-    <tr>
-        <th><%=unit.unit %></th>
-        <th><%=unit.origin %></th>
-        <th><%=unit.destination %></th>
-        <th><%=unit.owner %></th>
-        <th>通常</th> 
-        <th><%= link_to "詳細", unit %></th>
-        <th><%= link_to "結果", results_path(unit) %></th>
-        <th>設定</th>
-    </tr>
-        <% end %>
-</table>
+<div class="wrapper_units">
+   <aside_units class="left">
 
-<%# 通常は条件文、詳細・結果・設定はルート設定必要%>
-
-<%= Time.zone.now.strftime("%Y-%m-%d %H:%M") %>
-
-<h2>gmap</h2>
-<div id='map'></div>
-
-<style>
-#map{
-  height: 400px;
-}
-</style>
-
-<script>
-
-function initMap(){
-  map = new google.maps.Map(document.getElementById('map'), {
-  center: {lat: 35.681236, lng: 139.767125},
-  zoom: 8
-  });
+        <table class="table">
+            <tr>
+                <th class="text-center" >ユニット</th>
+                <th class="text-center">出発地</th>
+                <th class="text-center">目的地</th>
+                <th class="text-center">所有者</th>
+                <th class="text-center">状態</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>  
+                <% @units.each do |unit| %>
+            <tr>
+                <th class="text-center"><%=unit.unit %></th>
+                <th class="text-center"><%=unit.origin %></th>
+                <th class="text-center"><%=unit.destination %></th>
+                <th class="text-center"><%=unit.owner %></th>
+                <th class="text-center">通常</th> 
+                <th class="text-center"><%= link_to "詳細", unit %></th>
+                <th class="text-center"><%= link_to "結果", result_path(unit.id)%></th>
+                <th class="text-center"><%= link_to "設定", edit_unit_path(unit.id)%></th>
+            </tr>
+                <% end %>
+        </table>
+        
+        <%# 通常は条件文、詳細・結果・設定はルート設定必要%>
+    
+    </aside_units>
   
-   <% @temperatures.each do |temperature| %>
-  marker = new google.maps.Marker({
-    position:  {lat: <%=temperature.latitude %>, lng:<%=temperature.longitude %>},
-    map: map,
-    icon: {
-		fillColor: "#FF0000",                //塗り潰し色
-		fillOpacity: 0.8,                    //塗り潰し透過率
-		path: google.maps.SymbolPath.CIRCLE, //円を指定
-		scale: 8,                           //円のサイズ
-		strokeColor: "#FF0000",              //枠の色
-		strokeWeight: 1.0                    //枠の透過率
-	},
-	label: {
-		text: '<%=temperature.unit_id %>',                           //ラベル文字
-		color: '#FFFFFF',                    //文字の色
-		fontSize: '20px'                     //文字のサイズ
-	},
-  });
-  
-  infowindow = new google.maps.InfoWindow({
-    content: '<%=temperature.temperature %>',
-  });
-  
-  infowindow.open(map, marker);
-  
-   <% end %>
-}
-</script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJ-iUrMR3kpO9ir_CO0OXdg2hdiKsolnM&callback=initMap" async defer></script>
+  <div class=main_units>
+    
+        <div class="text-end h3">
+          <%= Time.zone.now.strftime("%Y-%m-%d %H:%M") %>
+        </div>
+        
+        <div id='map'></div>
+        
+        <style>
+        #map{
+          height: 500px;
+          width: 750px;
+        }
+        </style>
+        
+        <script>
+        
+        function initMap(){
+          map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 35.681236, lng: 139.767125},
+          zoom: 8
+          });
+          
+           <% @units.each do |unit| %>
+           <% @temperatures.each do |temperature| %>
+          marker = new google.maps.Marker({
+            position:  {lat: <%=temperature.latitude %>, lng:<%=temperature.longitude %>},
+            map: map,
+           <% if temperature.time >= '2021-09-11' and temperature.unit.send(@today) == 1 %>
+            
+            <% if temperature.temperature > (temperature.unit.lower_temperature+1) and temperature.temperature < (temperature.unit.upper_temperature-1) %>
+            icon: {
+        		fillColor: "blue",                //塗り潰し色
+        		fillOpacity: 0.8,                    //塗り潰し透過率
+        		path: google.maps.SymbolPath.CIRCLE, //円を指定
+        		scale: 8,                           //円のサイズ
+        		strokeColor: "blue",              //枠の色
+        		strokeWeight: 1.0                    //枠の透過率
+        	},
+        
+        		<% elsif temperature.temperature <= (temperature.unit.lower_temperature+1) and temperature.temperature >= temperature.unit.lower_temperature %>
+        	 icon: {
+        		fillColor: "#FF6600",                //塗り潰し色
+        		fillOpacity: 0.8,                    //塗り潰し透過率
+        		path: google.maps.SymbolPath.CIRCLE, //円を指定
+        		scale: 8,                           //円のサイズ
+        		strokeColor: "#FF6600",              //枠の色
+        		strokeWeight: 1.0                    //枠の透過率
+        	},
+        	<% elsif temperature.temperature <= temperature.unit.upper_temperature and temperature.temperature >= (temperature.unit.upper_temperature-1) %>
+        	 icon: {
+        		fillColor: "#FF6600",                //塗り潰し色
+        		fillOpacity: 0.8,                    //塗り潰し透過率
+        		path: google.maps.SymbolPath.CIRCLE, //円を指定
+        		scale: 8,                           //円のサイズ
+        		strokeColor: "#FF6600",              //枠の色
+        		strokeWeight: 1.0                    //枠の透過率
+        	},
+        	
+        	<% elsif temperature.temperature < temperature.unit.lower_temperature or temperature.temperature > temperature.unit.upper_temperature %>
+        	 icon: {
+        		fillColor: "red",                //塗り潰し色
+        		fillOpacity: 0.8,                    //塗り潰し透過率
+        		path: google.maps.SymbolPath.CIRCLE, //円を指定
+        		scale: 8,                           //円のサイズ
+        		strokeColor: "red",              //枠の色
+        		strokeWeight: 1.0                    //枠の透過率
+        	},
+        	
+        	
+        	<% end %>
+           
+           <% else %>
+        	icon: {
+        		fillColor: "gray",                //塗り潰し色
+        		fillOpacity: 0.8,                    //塗り潰し透過率
+        		path: google.maps.SymbolPath.CIRCLE, //円を指定
+        		scale: 8,                           //円のサイズ
+        		strokeColor: "gray",              //枠の色
+        		strokeWeight: 1.0                    //枠の透過率
+        	},
+           <% end %>
+        	
+        	label: {
+        		text: '<%=temperature.unit_id %>',                           //ラベル文字
+        		color: '#FFFFFF',                    //文字の色
+        		fontSize: '20px'                     //文字のサイズ
+        	},
+          });
+          
+          infowindow = new google.maps.InfoWindow({
+            content: '出発地：<%=temperature.unit.origin %><br>目的地：<%=temperature.unit.destination %><br>所有者：<%=temperature.unit.owner %><br>温度：<%=temperature.temperature %>',
+          });
+          
+          infowindow.open(map, marker);
+          
+           <% end %>
+           <% end %>
+        }
+        </script>
+        
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJ-iUrMR3kpO9ir_CO0OXdg2hdiKsolnM&callback=initMap" async defer></script>
+    
+    </div>
+</div>

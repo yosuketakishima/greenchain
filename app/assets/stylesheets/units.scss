@@ -1,3 +1,16 @@
-// Place all the styles related to the Units controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: https://sass-lang.com/
+.wrapper_units{
+    height: 100px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.main_units{
+    width: 50%;
+    margin-top: 5px;
+    margin-left: 10px;
+}
+aside_units{
+    margin-top: 30px;
+    width: 50%;
+    
+}

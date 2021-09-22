@@ -1,3 +1,25 @@
-// Place all the styles related to the results controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: https://sass-lang.com/
+.box1 {
+    margin: 5px;
+    border: 5px solid black;
+    padding: 5px;
+    width: 150px;
+}
+.box1 h1{
+    margin: 0;
+    padding: 5px;
+    text-align: center;
+}
+.wrapper{
+    height: 100px;
+    display: flex;
+}
+.main{
+    width: 33%;
+    padding: 10px;
+}
+
+.main2{
+    width: 33%;
+    margin-top: 5px;
+    margin-left: 50px;
+}
