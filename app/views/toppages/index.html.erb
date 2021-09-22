@@ -32,6 +32,7 @@ function initMap(){
   marker = new google.maps.Marker({
     position:  {lat: <%=temperature.latitude %>, lng:<%=temperature.longitude %>},
     map: map,
+   <% if temperature.time >= '2021-09-11' and temperature.unit.send(@today) == 1 %>
     
     <% if temperature.temperature > (temperature.unit.lower_temperature+1) and temperature.temperature < (temperature.unit.upper_temperature-1) %>
     icon: {
@@ -72,8 +73,19 @@ function initMap(){
 		strokeWeight: 1.0                    //枠の透過率
 	},
 	
-	<% end %>
 	
+	<% end %>
+   
+   <% else %>
+	icon: {
+		fillColor: "gray",                //塗り潰し色
+		fillOpacity: 0.8,                    //塗り潰し透過率
+		path: google.maps.SymbolPath.CIRCLE, //円を指定
+		scale: 8,                           //円のサイズ
+		strokeColor: "gray",              //枠の色
+		strokeWeight: 1.0                    //枠の透過率
+	},
+   <% end %>
 	
 	label: {
 		text: '<%=temperature.unit_id %>',                           //ラベル文字
@@ -83,9 +95,8 @@ function initMap(){
   });
   
   infowindow = new google.maps.InfoWindow({
-    content: '出発地：<%=unit.origin %><br>目的地：<%=unit.destination %><br>所有者：<%=unit.owner %><br>温度：<%=temperature.temperature %>',
+    content: '出発地：<%=temperature.unit.origin %><br>目的地：<%=temperature.unit.destination %><br>所有者：<%=temperature.unit.owner %><br>温度：<%=temperature.temperature %>',
   });
-  
   
   infowindow.open(map, marker);
   

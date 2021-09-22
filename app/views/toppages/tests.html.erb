@@ -1,0 +1,22 @@
+<%=Date.today.wday %>
+<%=Time.zone.now.strftime("%A")%>
+<%=@today %>
+
+
+
+  #稼働日
+
+  <% @temperatures.each do |temperature| %>
+  
+  
+      <% if temperature.time >= '2021-09-11' and temperature.unit.send(@today) == 1 %>
+      
+      2
+      
+      <% else %>
+      
+      5
+      
+      <% end %>
+  
+  <% end %>

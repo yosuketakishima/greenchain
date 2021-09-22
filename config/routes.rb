@@ -15,4 +15,6 @@ Rails.application.routes.draw do
   post 'units/:id/edit', to: 'units#edit', as: 'edit'
   post 'units/:id/destroy', to: 'units#destroy', as: 'destroy'
   
+  get 'tests', to: 'toppages#tests'
+  
 end
