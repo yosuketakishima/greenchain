@@ -1,21 +1,13 @@
 class ToppagesController < ApplicationController
+    
   def index
     if logged_in?
      @units=current_user.units
-     @temperatures=Temperature.where(unit_id: @units)
-     #グループ化の必要あり
-     #@temperature=Temperature.select(:id).where(unit_id: @units).maximum('created_at')
-     #@temperatures=Temperature.where(id: @temperature)
+     #ユニットごとに最新のレコードを1個取得する方法が不明→ユニットごとでグループ化して1個のレコードを取得している
+     @temperature=Temperature.where(unit_id: @units)
+     @temperatures=@temperature.group(:unit_id)
      @today=Time.zone.now.strftime("%A").downcase
-     gon.temperatures=Temperature.all
     end
-    
   end
   
-  def tests
-      @units=current_user.units
-      @temperatures=Temperature.all
-      @today=Time.zone.now.strftime("%A").downcase
-  end
-      
 end

@@ -27,72 +27,77 @@ function initMap(){
   zoom: 8
   });
   
-   <% @units.each do |unit| %>
    <% @temperatures.each do |temperature| %>
-  marker = new google.maps.Marker({
+ 	marker = new google.maps.Marker({
     position:  {lat: <%=temperature.latitude %>, lng:<%=temperature.longitude %>},
     map: map,
-   <% if temperature.time >= '2021-09-11' and temperature.unit.send(@today) == 1 %>
     
-    <% if temperature.temperature > (temperature.unit.lower_temperature+1) and temperature.temperature < (temperature.unit.upper_temperature-1) %>
-    icon: {
-		fillColor: "blue",                //塗り潰し色
-		fillOpacity: 0.8,                    //塗り潰し透過率
-		path: google.maps.SymbolPath.CIRCLE, //円を指定
-		scale: 8,                           //円のサイズ
-		strokeColor: "blue",              //枠の色
-		strokeWeight: 1.0                    //枠の透過率
-	},
-
+   <%#ユニットが本ページを開いた日のデータを取得しており、且つ、本ページを開いた日が稼働日の場合、稼働日とする%>
+    
+   <% if temperature.time >= Date.today and temperature.unit.send(@today) == 1 %>
+    
+	    <% if temperature.temperature > (temperature.unit.lower_temperature+1) and temperature.temperature < (temperature.unit.upper_temperature-1) %>
+	    icon: {
+			fillColor: "blue",               
+			fillOpacity: 0.8,                    
+			path: google.maps.SymbolPath.CIRCLE, 
+			scale: 8,                           
+			strokeColor: "blue",              
+			strokeWeight: 1.0                    
+		},
+	
 		<% elsif temperature.temperature <= (temperature.unit.lower_temperature+1) and temperature.temperature >= temperature.unit.lower_temperature %>
-	 icon: {
-		fillColor: "#FF6600",                //塗り潰し色
-		fillOpacity: 0.8,                    //塗り潰し透過率
-		path: google.maps.SymbolPath.CIRCLE, //円を指定
-		scale: 8,                           //円のサイズ
-		strokeColor: "#FF6600",              //枠の色
-		strokeWeight: 1.0                    //枠の透過率
-	},
-	<% elsif temperature.temperature <= temperature.unit.upper_temperature and temperature.temperature >= (temperature.unit.upper_temperature-1) %>
-	 icon: {
-		fillColor: "#FF6600",                //塗り潰し色
-		fillOpacity: 0.8,                    //塗り潰し透過率
-		path: google.maps.SymbolPath.CIRCLE, //円を指定
-		scale: 8,                           //円のサイズ
-		strokeColor: "#FF6600",              //枠の色
-		strokeWeight: 1.0                    //枠の透過率
-	},
-	
-	<% elsif temperature.temperature < temperature.unit.lower_temperature or temperature.temperature > temperature.unit.upper_temperature %>
-	 icon: {
-		fillColor: "red",                //塗り潰し色
-		fillOpacity: 0.8,                    //塗り潰し透過率
-		path: google.maps.SymbolPath.CIRCLE, //円を指定
-		scale: 8,                           //円のサイズ
-		strokeColor: "red",              //枠の色
-		strokeWeight: 1.0                    //枠の透過率
-	},
-	
-	
-	<% end %>
+		 icon: {
+			fillColor: "#FF6600",                
+			fillOpacity: 0.8,                    
+			path: google.maps.SymbolPath.CIRCLE, 
+			scale: 8,                           
+			strokeColor: "#FF6600",              
+			strokeWeight: 1.0                    
+		},
+		<% elsif temperature.temperature <= temperature.unit.upper_temperature and temperature.temperature >= (temperature.unit.upper_temperature-1) %>
+		 icon: {
+			fillColor: "#FF6600",                
+			fillOpacity: 0.8,                    
+			path: google.maps.SymbolPath.CIRCLE, 
+			scale: 8,                          
+			strokeColor: "#FF6600",              
+			strokeWeight: 1.0                    
+		},
+		
+		<% elsif temperature.temperature < temperature.unit.lower_temperature or temperature.temperature > temperature.unit.upper_temperature %>
+		 icon: {
+			fillColor: "red",                
+			fillOpacity: 0.8,                    
+			path: google.maps.SymbolPath.CIRCLE, 
+			scale: 8,                           
+			strokeColor: "red",              
+			strokeWeight: 1.0                    
+		},
+		
+		<% end %>
    
    <% else %>
+   
 	icon: {
-		fillColor: "gray",                //塗り潰し色
-		fillOpacity: 0.8,                    //塗り潰し透過率
-		path: google.maps.SymbolPath.CIRCLE, //円を指定
-		scale: 8,                           //円のサイズ
-		strokeColor: "gray",              //枠の色
-		strokeWeight: 1.0                    //枠の透過率
+		fillColor: "gray",                
+		fillOpacity: 0.8,                    
+		path: google.maps.SymbolPath.CIRCLE, 
+		scale: 8,                           
+		strokeColor: "gray",             
+		strokeWeight: 1.0                    
 	},
+	
    <% end %>
 	
 	label: {
-		text: '<%=temperature.unit_id %>',                           //ラベル文字
-		color: '#FFFFFF',                    //文字の色
-		fontSize: '20px'                     //文字のサイズ
+		text: '<%=temperature.unit_id %>',                          
+		color: '#FFFFFF',                    
+		fontSize: '20px'                    
 	},
   });
+  
+  <%#地図上のマーカーにカーソルを合わせたときにinforwindowが表示される形を目指すが今回は時間の制約上省略%> 
   
   infowindow = new google.maps.InfoWindow({
     content: '出発地：<%=temperature.unit.origin %><br>目的地：<%=temperature.unit.destination %><br>所有者：<%=temperature.unit.owner %><br>温度：<%=temperature.temperature %>',
@@ -100,7 +105,6 @@ function initMap(){
   
   infowindow.open(map, marker);
   
-   <% end %>
    <% end %>
 }
 </script>
@@ -115,7 +119,9 @@ function initMap(){
  <% end %>
  
  <% end %>
-    
+
+<%#通常画面%>
+ 
 <% else %>
  <div class="row">
     <div class="background">

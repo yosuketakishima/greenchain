@@ -1,14 +1,14 @@
 class UnitsController < ApplicationController
+    before_action :require_user_logged_in
+    
     def index
-      if logged_in?
+    
          @units=current_user.units
-         @temperatures=Temperature.where(unit_id: @units)
-         #グループ化の必要あり
-         #@temperature=Temperature.select(:id).where(unit_id: @units).maximum('created_at')
-         #@temperatures=Temperature.where(id: @temperature)
+         #ユニットごとに最新のレコードを1個取得する方法が不明→ユニットごとでグループ化して1個のレコードを取得している
+         @temperature=Temperature.where(unit_id: @units)
+         @temperatures=@temperature.group(:unit_id)
          @today=Time.zone.now.strftime("%A").downcase
-         gon.temperatures=Temperature.all
-      end
+     
     end
     
     def show
@@ -26,13 +26,17 @@ class UnitsController < ApplicationController
          { name: "上限", data: upper },
          { name: "下限", data: lower },
         ]
+        
     end
     
     def edit
+        
         @units=Unit.find(params[:id])
+        
     end
     
     def update
+        
         @units = Unit.find(params[:id])
 
         if @units.update(unit_params)
@@ -46,39 +50,25 @@ class UnitsController < ApplicationController
     end
     
     def destroy
+        
         @day_from = params[:day_from]
         @day_to = params[:day_to]
         Temperature.where(unit_id: params[:id], time: @day_from..@day_to).destroy_all
         
         flash[:success] = 'データ は正常に削除されました'
-        redirect_to units_path
+        redirect_to @units
+        
     end
     
     def results
+        
         @day_from = params[:day_from]
         @day_to = params[:day_to]
         @deviations = Deviation.where(unit_id: params[:id]).where(time: @day_from..@day_to)
         
-        #発送
-        # @dispatch_number = Temperature.where(unit_id: params[:id]).where(time: @day_from..@day_to).count
-
-        # https://docs.ruby-lang.org/ja/latest/class/Date.html
-        @dispatch_number = (@day_from..@day_to).sum do |day|
-                              temperature = Temperature.where(unit_id: params[:id]).where(time: day).first
-                              unit = temperature.unit
-  
-                              case day.cwday
-                                when 1 then return unit.monday
-                                when 2 then return unit.tuesday
-                                when 3 then return unit.wednesday
-                                when 4 then return unit.thursday
-                                when 5 then return unit.friday
-                                when 6 then return unit.saturday
-                                when 0 then return unit.sunday
-                              end
-                            end
-    
-        
+        #dispatch_number（発送数）は検索した日が稼働日の場合はカウント、不稼働日の場合は非カウントで計算する仕様だが今回は実装ができず次の課題とする
+        #dispatch_number（発送数）は検索した期間に発生したレコードの数で仮置きしている
+        @dispatch_number = Temperature.where(unit_id: params[:id]).where(time: @day_from..@day_to).count
         @deviation_number = Deviation.where(unit_id: params[:id]).where(time: @day_from..@day_to).count
         @deviation_rate = @deviation_number.to_f/@dispatch_number*100
         
@@ -86,12 +76,15 @@ class UnitsController < ApplicationController
         @temperatures = Temperature.where(unit_id: params[:id]).where(time: @day_from..@day_to)
         
         temp= @temperatures.group(:time).sum(:temperature)
-        base = Unit.joins(:temperatures).where(unit: params[:id]).where(temperatures: {time: @day_from..@day_to}).group(:time).sum(:upper_temperature)
+        upper = Unit.joins(:temperatures).where(unit: params[:id]).where(temperatures: {time: @day_from..@day_to}).group(:time).sum(:upper_temperature)
+        lower = Unit.joins(:temperatures).where(unit: params[:id]).where(temperatures: {time: @day_from..@day_to}).group(:time).sum(:lower_temperature)
         
         @chart = [
          { name: "温度", data: temp },
-         { name: "基準", data: base },
+         { name: "上限", data: upper },
+         { name: "下限", data: lower },
         ]
+   
     end
     
     private

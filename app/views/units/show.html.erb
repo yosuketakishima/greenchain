@@ -1,13 +1,15 @@
 <div class="text-end mt-3">
   <li class="d-inline-block me-3"><%= link_to '詳細', unit_path, class:"link" %></li>
-  <li class="d-inline-block me-3"><%= link_to '結果', results_path, class:"link" %></li>
+  <li class="d-inline-block me-3"><%= link_to '結果', result_path, class:"link" %></li>
   <li class="d-inline-block me-3"><%= link_to '設定', edit_path, class: "link" %></li>
 </div>
 
 <div class="wrapper">
+ 
     <aside class="left">
       <%= image_tag "tablet.svg", size: '120x135' %>
-     </aside>
+    </aside>
+    
     <div class="main">
    
        <p><%= "ユニット　　" %><%= @units.unit %></p>
@@ -15,10 +17,12 @@
        <p><%= "目的地　　" %><%= @units.destination %></p>
        <p><%= "所有者　　" %><%= @units.owner %></p>
       
-     </div>
+    </div>
+    
 </div>
  
 <div class="wrapper_units mt-3">
+ 
    <aside_units class="left">
  
         <h3><%= Time.zone.now.strftime("%Y-%m-%d %H:%M") %></h3>
@@ -39,69 +43,72 @@
          zoom: 8
          });
          
+          <%#本来地図・グラフ上で表示させるユニットのデータは、ページを開いた日のデータに限定するが、現状最新の日のデータを取得できる仕様になっていないため、
+          便宜的にデータを表示する期間を2021-09-11以降とし、データが見られる形としている%>
+         
           <% @temperatures.each do |temperature| %>
-         marker = new google.maps.Marker({
+          
+           marker = new google.maps.Marker({
            position:  {lat: <%=temperature.latitude %>, lng:<%=temperature.longitude %>},
            map: map,
+           
           <% if temperature.time >= '2021-09-11' and temperature.unit.send(@today) == 1 %>
            
-           <% if temperature.temperature > (temperature.unit.lower_temperature+1) and temperature.temperature < (temperature.unit.upper_temperature-1) %>
-           icon: {
-       		fillColor: "blue",                //塗り潰し色
-       		fillOpacity: 0.8,                    //塗り潰し透過率
-       		path: google.maps.SymbolPath.CIRCLE, //円を指定
-       		scale: 8,                           //円のサイズ
-       		strokeColor: "blue",              //枠の色
-       		strokeWeight: 1.0                    //枠の透過率
-       	},
-       
-       		<% elsif temperature.temperature <= (temperature.unit.lower_temperature+1) and temperature.temperature >= temperature.unit.lower_temperature %>
-       	 icon: {
-       		fillColor: "#FF6600",                //塗り潰し色
-       		fillOpacity: 0.8,                    //塗り潰し透過率
-       		path: google.maps.SymbolPath.CIRCLE, //円を指定
-       		scale: 8,                           //円のサイズ
-       		strokeColor: "#FF6600",              //枠の色
-       		strokeWeight: 1.0                    //枠の透過率
-       	},
-       	<% elsif temperature.temperature <= temperature.unit.upper_temperature and temperature.temperature >= (temperature.unit.upper_temperature-1) %>
-       	 icon: {
-       		fillColor: "#FF6600",                //塗り潰し色
-       		fillOpacity: 0.8,                    //塗り潰し透過率
-       		path: google.maps.SymbolPath.CIRCLE, //円を指定
-       		scale: 8,                           //円のサイズ
-       		strokeColor: "#FF6600",              //枠の色
-       		strokeWeight: 1.0                    //枠の透過率
-       	},
-       	
-       	<% elsif temperature.temperature < temperature.unit.lower_temperature or temperature.temperature > temperature.unit.upper_temperature %>
-       	 icon: {
-       		fillColor: "red",                //塗り潰し色
-       		fillOpacity: 0.8,                    //塗り潰し透過率
-       		path: google.maps.SymbolPath.CIRCLE, //円を指定
-       		scale: 8,                           //円のサイズ
-       		strokeColor: "red",              //枠の色
-       		strokeWeight: 1.0                    //枠の透過率
-       	},
-       	
-       	
-       	<% end %>
+            <% if temperature.temperature > (temperature.unit.lower_temperature+1) and temperature.temperature < (temperature.unit.upper_temperature-1) %>
+                icon: {
+            		fillColor: "blue",                
+            		fillOpacity: 0.8,                    
+            		path: google.maps.SymbolPath.CIRCLE, 
+            		scale: 8,                           
+            		strokeColor: "blue",              
+            		strokeWeight: 1.0                    
+            	},
+        
+        	  	<% elsif temperature.temperature <= (temperature.unit.lower_temperature+1) and temperature.temperature >= temperature.unit.lower_temperature %>
+            	 icon: {
+            		fillColor: "#FF6600",                
+            		fillOpacity: 0.8,                    
+            		path: google.maps.SymbolPath.CIRCLE, 
+            		scale: 8,                           
+            		strokeColor: "#FF6600",             
+            		strokeWeight: 1.0                    
+            	},
+           	<% elsif temperature.temperature <= temperature.unit.upper_temperature and temperature.temperature >= (temperature.unit.upper_temperature-1) %>
+            	 icon: {
+            		fillColor: "#FF6600",                
+            		fillOpacity: 0.8,                    
+            		path: google.maps.SymbolPath.CIRCLE, 
+            		scale: 8,                           
+            		strokeColor: "#FF6600",              
+            		strokeWeight: 1.0                    
+            	},
+        	   <% elsif temperature.temperature < temperature.unit.lower_temperature or temperature.temperature > temperature.unit.upper_temperature %>
+            	 icon: {
+            		fillColor: "red",                
+            		fillOpacity: 0.8,                    
+            		path: google.maps.SymbolPath.CIRCLE, 
+            		scale: 8,                           
+            		strokeColor: "red",              
+            		strokeWeight: 1.0                    
+            	},
+        
+       	    <% end %>
           
           <% else %>
-       	icon: {
-       		fillColor: "gray",                //塗り潰し色
-       		fillOpacity: 0.8,                    //塗り潰し透過率
-       		path: google.maps.SymbolPath.CIRCLE, //円を指定
-       		scale: 8,                           //円のサイズ
-       		strokeColor: "gray",              //枠の色
-       		strokeWeight: 1.0                    //枠の透過率
-       	},
+             	icon: {
+             		fillColor: "gray",                
+             		fillOpacity: 0.8,                    
+             		path: google.maps.SymbolPath.CIRCLE, 
+             		scale: 8,                           
+             		strokeColor: "gray",              
+             		strokeWeight: 1.0                    
+             	},
           <% end %>
        	
        	label: {
-       		text: '<%=temperature.unit_id %>',                           //ラベル文字
-       		color: '#FFFFFF',                    //文字の色
-       		fontSize: '20px'                     //文字のサイズ
+       		text: '<%=temperature.unit_id %>',                          
+       		color: '#FFFFFF',                    
+       		fontSize: '20px'                    
        	},
          });
          

@@ -1,12 +1,12 @@
 <div class="text-end mt-3">
-<%= form_with(url: results_path, method: :get, local: true) do |f| %>
-
-  <%= f.date_field :day_from, value: @day_from %> ~
-  <%= f.date_field :day_to, value: @day_to %>
+  <%= form_with(url: results_path, method: :get, local: true) do |f| %>
   
-  <%= submit_tag '検索', class: "button" %>
-
-<% end %>
+    <%= f.date_field :day_from, value: @day_from %> ~
+    <%= f.date_field :day_to, value: @day_to %>
+    
+    <%= submit_tag '検索', class: "button" %>
+  
+  <% end %>
 </div>
 
 
@@ -50,17 +50,17 @@
         position:  {lat: <%=deviation.latitude %>, lng:<%=deviation.longitude %>},
         map: map,
         icon: {
-    		fillColor: "#FF0000",                //塗り潰し色
-    		fillOpacity: 0.8,                    //塗り潰し透過率
-    		path: google.maps.SymbolPath.CIRCLE, //円を指定
-    		scale: 8,                           //円のサイズ
-    		strokeColor: "#FF0000",              //枠の色
-    		strokeWeight: 1.0                    //枠の透過率
+    		fillColor: "#FF0000",                
+    		fillOpacity: 0.8,                   
+    		path: google.maps.SymbolPath.CIRCLE, 
+    		scale: 8,                           
+    		strokeColor: "#FF0000",              
+    		strokeWeight: 1.0                    
     	},
     	label: {
-    		text: '<%=deviation.unit_id %>',                           //ラベル文字
-    		color: '#FFFFFF',                    //文字の色
-    		fontSize: '20px'                     //文字のサイズ
+    		text: '<%=deviation.unit_id %>',                           
+    		color: '#FFFFFF',                    
+    		fontSize: '20px'                     
     	},
       });
       
@@ -73,7 +73,9 @@
        <% end %>
     }
     </script>
+    
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJ-iUrMR3kpO9ir_CO0OXdg2hdiKsolnM&callback=initMap" async defer></script>
+    
   </aside>
   
   <div class=main2>

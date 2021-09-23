@@ -1,13 +1,13 @@
- <ul>
-  <li><%= link_to '詳細', unit_path %></li>
-  <li><%= link_to '結果', results_path %></li>
-  <li><%= link_to '設定', units_path %></li>
-</ul>
+<div class="text-end mt-3">
+  <li class="d-inline-block me-3"><%= link_to '詳細', unit_path, class:"link" %></li>
+  <li class="d-inline-block me-3"><%= link_to '結果', result_path, class:"link" %></li>
+  <li class="d-inline-block me-3"><%= link_to '設定', edit_path, class: "link" %></li>
+</div>
 
-<h1>検索</h1>
+<div class="text-end mt-3">
+    
 <%= form_with(url: result_path, method: :get, local: true) do |f| %>
 
-  <%= f.label :deviation, "期間" %>
   <%= f.date_field :day_from, value: @day_from %> ~
   <%= f.date_field :day_to, value: @day_to %>
   
@@ -15,71 +15,125 @@
 
 <% end %>
 
-    <p><%='温度逸脱日時' %></p>
+</div>
 
-<% @deviations.each do |deviation| %>
+<div class="wrapper">
+    
+    <aside class="left">
+      <%= image_tag "tablet.svg", size: '120x135' %>
+     </aside>
+     
+    <div class="main">
+   
+       <p><%= "ユニット　　" %><%= @units.unit %></p>
+       <p><%= "出発地　　" %><%= @units.origin %></p>
+       <p><%= "目的地　　" %><%= @units.destination %></p>
+       <p><%= "所有者　　" %><%= @units.owner %></p>
+      
+    </div>
 
-    <p><%= deviation.time.strftime("%Y-%m-%d %H:%M")%><%= deviation.temperature %></p>
+</div>
+
+  <div class="mt-5">
+  <h5>温度逸脱率</h5>
+  </div>
   
+  <div class="wrapper mt-1">
+    <aside class="left">
+      <div class="box1">
+      <h1><%= number_to_percentage(@deviation_rate, precision:1) %></h1>
+      </div>
+    </aside>
+    <div class="main">
+      <p><%='発送数　　　' %><%= @dispatch_number %></p>
+      <p><%='温度逸脱　　' %><%= @deviation_number %></p>
+    </div>
+  </div>
 
-<% end %>
 
-<ul>
-  <li><%='発送数　　' %><%= @dispatch_number %></li>
-  <li><%='温度逸脱　　' %><%= @deviation_number %></li>
-  <li><%='温度逸脱率　　'%><%= number_to_percentage(@deviation_rate) %></li>
+  <div class="wrapper">
+      
+   <aside class="left">
+    
+    <h5>温度逸脱場所</h5>
+    <div id='map'></div>
+    
+    <style>
+    #map{
+      height: 500px;
+      width: 800px;
+    }
+    </style>
+    
+    <script>
+    
+    function initMap(){
+      map = new google.maps.Map(document.getElementById('map'), {
+      center: {lat: 35.681236, lng: 139.767125},
+      zoom: 8
+      });
+      
+       <% @deviations.each do |deviation| %>
+      marker = new google.maps.Marker({
+        position:  {lat: <%=deviation.latitude %>, lng:<%=deviation.longitude %>},
+        map: map,
+        icon: {
+    		fillColor: "#FF0000",                
+    		fillOpacity: 0.8,                    
+    		path: google.maps.SymbolPath.CIRCLE, 
+    		scale: 8,                           
+    		strokeColor: "#FF0000",              
+    		strokeWeight: 1.0                    
+    	},
+    	label: {
+    		text: '<%=deviation.unit_id %>',                           
+    		color: '#FFFFFF',                    
+    		fontSize: '20px'                     
+    	},
+      });
+      
+      infowindow = new google.maps.InfoWindow({
+        content: '<%=deviation.time.strftime("%Y-%m-%d %H:%M") %>',
+      });
+      
+      infowindow.open(map, marker);
+      
+       <% end %>
+    }
+    </script>
+    
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJ-iUrMR3kpO9ir_CO0OXdg2hdiKsolnM&callback=initMap" async defer></script>
+    
+  </aside>
   
-</ul>
+  <div class=main2>
+    
+  <h5>温度逸脱日時</h5>
+    <table class="table">
+      <tr>
+        <th class="text-center">ユニット</th>
+        <th class="text-center">日時</th>
+        <th class="text-center">温度</th>
+      </tr>
+    
+        <% @deviations.each do |deviation| %>
+    
+      <tr>
+        <th class="text-center"><%= deviation.unit.id %></th>
+        <th class="text-center"><%= deviation.time.strftime("%Y-%m-%d %H:%M")%></th>
+        <th class="text-center"><%= deviation.temperature %></th>
+      </tr>
+      
+        <% end %>
+    </table>
+    
+  </div>
 
-<h2>gmap</h2>
-<div id='map'></div>
+</div>
 
-<style>
-#map{
-  height: 400px;
-}
-</style>
-
-<script>
-
-function initMap(){
-  map = new google.maps.Map(document.getElementById('map'), {
-  center: {lat: 35.681236, lng: 139.767125},
-  zoom: 8
-  });
-  
-   <% @deviations.each do |deviation| %>
-  marker = new google.maps.Marker({
-    position:  {lat: <%=deviation.latitude %>, lng:<%=deviation.longitude %>},
-    map: map,
-    icon: {
-		fillColor: "#FF0000",                //塗り潰し色
-		fillOpacity: 0.8,                    //塗り潰し透過率
-		path: google.maps.SymbolPath.CIRCLE, //円を指定
-		scale: 8,                           //円のサイズ
-		strokeColor: "#FF0000",              //枠の色
-		strokeWeight: 1.0                    //枠の透過率
-	},
-	label: {
-		text: '<%=deviation.unit_id %>',                           //ラベル文字
-		color: '#FFFFFF',                    //文字の色
-		fontSize: '20px'                     //文字のサイズ
-	},
-  });
-  
-  infowindow = new google.maps.InfoWindow({
-    content: '<%=deviation.temperature %>',
-  });
-  
-  infowindow.open(map, marker);
-  
-   <% end %>
-}
-</script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJ-iUrMR3kpO9ir_CO0OXdg2hdiKsolnM&callback=initMap" async defer></script>
+<div class="box3">
  
-
  <%= line_chart @chart, title: "温度推移" ,xtitle: "日時", ytitle: "温度（℃）" %>
  
-  
+</div>
   
