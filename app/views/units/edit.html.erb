@@ -1,56 +1,88 @@
- <%= image_tag "tablet.svg", size: '100x200' %><%= "ユニット　　" %><%= @units.unit %>
- 
- <p><%= '【属性情報】' %></p>
- 
- <%= form_with(model: @units) do |f| %>
-  <ol>
-     <li><%= f.label :origin, '出発地' %><%= f.text_field :origin %></li>
-     <li><%= f.label :destination, '目的地' %><%= f.text_field :destination %></li>
-     <li><%= f.label :owner, '所有者' %><%= f.text_field :owner %></li>
-     <li><%= f.label :departure_time, '出発時間' %><%= f.time_field :departure_time %></li>
-     <li><%= f.label :arrival_time, '到着時間' %><%= f.time_field :arrival_time %></li>
-  </ol>
-     <%= f.label :monday, '月' %>
-     <%= f.number_field :monday %>
-     
-     <%= f.label :tuesday, '火' %>
-     <%= f.number_field :tuesday %>
-     
-     <%= f.label :wednesday, '水' %>
-     <%= f.number_field :wednesday %>
-     
-     <%= f.label :thursday, '木' %>
-     <%= f.number_field :thursday %>
+ <div class="text-end mt-3">
+  <li class="d-inline-block me-3"><%= link_to '詳細', unit_path, class:"link" %></li>
+  <li class="d-inline-block me-3"><%= link_to '結果', results_path, class:"link" %></li>
+  <li class="d-inline-block me-3"><%= link_to '設定', edit_path, class: "link" %></li>
+</div>
 
-     <%= f.label :friday, '金' %>
-     <%= f.number_field :friday %>
+<div class="wrapper">
+    <aside class="left">
+      <%= image_tag "tablet.svg", size: '120x135' %>
+     </aside>
+    <div class="main">
+   
+       <p><%= "ユニット　　" %><%= @units.unit %></p>
+
+     </div>
+</div>
+
+<div class="wrapper_units m-5">
+    <aside class="left">
+ 
+     <h5>【属性情報】</h5>
      
-     <%= f.label :saturday, '土' %>
-     <%= f.number_field :saturday %>
-     
-     <%= f.label :sunday, '日' %>
-     <%= f.number_field :sunday %>
+     <%= form_with(model: @units) do |f| %>
+      <ol>
+         <li><%= f.label :origin, '出発地　' %><%= f.text_field :origin %></li>
+         <li><%= f.label :destination, '目的地　' %><%= f.text_field :destination %></li>
+         <li><%= f.label :owner, '所有者　' %><%= f.text_field :owner %></li>
+         <li><%= f.label :departure_time, '出発時間　' %><%= f.time_field :departure_time %></li>
+         <li><%= f.label :arrival_time, '到着時間　' %><%= f.time_field :arrival_time %></li>
+         <li>稼働日</li>
+      </ol>
+         <%= f.label :monday, '月' %>
+         <%= f.check_box :monday %>
+         
+         <%= f.label :tuesday, '火' %>
+         <%= f.check_box :tuesday %>
+         
+         <%= f.label :wednesday, '水' %>
+         <%= f.check_box :wednesday %>
+         
+         <%= f.label :thursday, '木' %>
+         <%= f.check_box :thursday %>
     
-  <p><%='【アラート】' %></p>
+         <%= f.label :friday, '金' %>
+         <%= f.check_box :friday %>
+         
+         <%= f.label :saturday, '土' %>
+         <%= f.check_box :saturday %>
+         
+         <%= f.label :sunday, '日' %>
+         <%= f.check_box :sunday %>
+     
+      </aside>
   
-  <ol>
-     <li><%= f.label :upper_temperature, '上限温度（℃）' %><%= f.number_field :upper_temperature %></li>
-     <li><%= f.label :lower_temperature, '下限温度（℃）' %><%= f.number_field :lower_temperature %></li>
-  </ol>
-  
-     <%=f.submit '更新' %>
- <% end %>
+      <div class=main_units2>
+    
+         <h5>【アラート】</h5>
+         
+         <ol>
+            <li><%= f.label :upper_temperature, '上限温度（℃）　' %><%= f.number_field :upper_temperature %></li>
+            <li><%= f.label :lower_temperature, '下限温度（℃）　' %><%= f.number_field :lower_temperature %></li>
+         </ol>
+         
+            <%=f.submit '更新',class: "button btn-success" %>
+        <% end %>
  
- <p><%='【メモリー消去】' %></p>
- 
- <%= form_with(url: unit_path, method: :delete, local: true) do |f| %>
+      </div>
+      
+</div>
+         
+<div class='box2'>
+      
+      <h5>【メモリー消去】</h5>
+         
+         <%= form_with(url: unit_path, method: :delete, local: true) do |f| %>
+        
+          <%= f.label :memory, "期間　" %>
+          <%= f.date_field :day_from, value: @day_from %> ~
+          <%= f.date_field :day_to, value: @day_to %>
+          
+          <%= submit_tag '消去', class: "button btn-danger" %>
+          
+         <% end %>
+         
+</div>  
 
-  <%= f.label :memory, "期間" %>
-  <%= f.date_field :day_from, value: @day_from %> ~
-  <%= f.date_field :day_to, value: @day_to %>
-  
-  <%= submit_tag '消去', class: "button" %>
-  
- <% end %>
 
  
