@@ -15,13 +15,16 @@ class UnitsController < ApplicationController
         
         @units=Unit.find(params[:id])
         @temperatures = Temperature.where(unit_id: params[:id])
+        @today=Time.zone.now.strftime("%A").downcase
         
         temp= @temperatures.group(:time).sum(:temperature)
-        base = Unit.joins(:temperatures).where(unit: params[:id]).group(:time).sum(:upper_temperature)
+        upper = Unit.joins(:temperatures).where(unit: params[:id]).group(:time).sum(:upper_temperature)
+        lower = Unit.joins(:temperatures).where(unit: params[:id]).group(:time).sum(:lower_temperature)
         
         @chart = [
          { name: "温度", data: temp },
-         { name: "基準", data: base },
+         { name: "上限", data: upper },
+         { name: "下限", data: lower },
         ]
     end
     
